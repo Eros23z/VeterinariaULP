@@ -1,0 +1,27 @@
+﻿@model VeterinariaULP.Models.Especie
+
+@{
+    ViewData["Title"] = "Eliminar Especie";
+}
+
+<h2 class="text-danger">Eliminar Especie</h2>
+<h5>¿Estás seguro de que deseas eliminar esta categoría?</h5>
+<hr />
+
+<div class="card border-danger shadow-sm col-md-6 mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.IdEspecie)</dt>
+            <dd class="col-sm-8">#@Model.IdEspecie</dd>
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Nombre)</dt>
+            <dd class="col-sm-8"><strong>@Model.Nombre</strong></dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete" asp-route-id="@Model.IdEspecie" method="post">
+    <input type="hidden" name="id" value="@Model.IdEspecie" />
+    <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

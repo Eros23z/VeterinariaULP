@@ -1,0 +1,113 @@
+﻿@model IEnumerable<VeterinariaULP.Models.Mascota>
+
+@{
+    ViewData["Title"] = "Listado de Pacientes";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-heart-pulse"></i> Pacientes (Mascotas)</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nueva Mascota
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="get" asp-action="Index" class="row g-2 mb-3 bg-light p-3 rounded shadow-sm">
+    <div class="col-md-5">
+        <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, raza o dueño (DNI/apellido)..." value="@ViewBag.Search" />
+    </div>
+    <div class="col-md-3">
+        <select name="idEspecie" class="form-select" asp-items="ViewBag.Especies">
+            <option value="">-- Todas las Especies --</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-outline-secondary w-100">Filtrar</button>
+    </div>
+    <div class="col-md-2">
+        <a asp-action="Index" class="btn btn-outline-danger w-100">Limpiar</a>
+    </div>
+</form>
+
+<div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover align-middle mb-0 bg-white">
+        <thead class="table-dark">
+            <tr>
+                <th>Paciente</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th>Sexo</th>
+                <th>Dueño Responsable</th>
+                <th>Estado</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="7" class="text-center py-4 text-muted">No se encontraron mascotas registradas con los criterios dados.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                @if (!string.IsNullOrEmpty(item.Foto))
+                                {
+                                    <img src="@item.Foto" class="rounded-circle me-2 border shadow-sm" width="40" height="40" style="object-fit: cover;" alt="Foto" />
+                                }
+                                else
+                                {
+                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                        <i class="bi bi-camera"></i>
+                                    </div>
+                                }
+                                <strong>@item.Nombre</strong>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-info text-dark">@item.Especie?.Nombre</span></td>
+                        <td>@item.Raza</td>
+                        <td>@item.Sexo</td>
+                        <td>
+                            <a asp-controller="Dueños" asp-action="Details" asp-route-id="@item.IdDueño" class="text-decoration-none">
+                                @item.Dueño?.NombreCompleto
+                            </a>
+                            <small class="text-muted d-block">DNI: @item.Dueño?.Dni</small>
+                        </td>
+                        <td>
+                            <span class="badge @(item.Activo ? "bg-success" : "bg-secondary")">
+                                @(item.Activo ? "Activo" : "Inactivo")
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-id="@item.IdMascota" class="btn btn-sm btn-outline-warning">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.IdMascota" class="btn btn-sm btn-outline-info">Detalles</a>
+                            <a asp-action="Delete" asp-route-id="@item.IdMascota" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_Pagination" />

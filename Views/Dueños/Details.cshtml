@@ -1,0 +1,45 @@
+﻿@model VeterinariaULP.Models.Dueño
+
+@{
+    ViewData["Title"] = "Detalle del Dueño";
+}
+
+<h2>Ficha del Dueño</h2>
+<hr />
+
+<div class="card shadow-sm col-md-6">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">DNI</dt>
+            <dd class="col-sm-8"><strong>@Model.Dni</strong></dd>
+
+            <dt class="col-sm-4">Nombre Completo</dt>
+            <dd class="col-sm-8">@Model.NombreCompleto</dd>
+
+            <dt class="col-sm-4">Teléfono</dt>
+            <dd class="col-sm-8">@Model.Telefono</dd>
+
+            <dt class="col-sm-4">Correo Electrónico</dt>
+            <dd class="col-sm-8">@Model.Email</dd>
+
+            <dt class="col-sm-4">Dirección</dt>
+            <dd class="col-sm-8">@Model.Direccion</dd>
+
+            <dt class="col-sm-4">Estado</dt>
+            <dd class="col-sm-8">
+                @if (Model.Estado)
+                {
+                    <span class="badge bg-success">Activo</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Inactivo</span>
+                }
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-transparent d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.IdDueño" class="btn btn-warning">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+    </div>
+</div>

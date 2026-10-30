@@ -1,0 +1,124 @@
+﻿@model VeterinariaULP.Models.Mascota
+
+@{
+    ViewData["Title"] = "Editar Mascota";
+}
+
+<h2>Editar Mascota #@Model.IdMascota</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" asp-route-id="@Model.IdMascota" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="IdMascota" />
+            <input type="hidden" asp-for="Foto" />
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Nombre" class="form-label fw-bold"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="IdEspecie" class="form-label fw-bold"></label>
+                    <select asp-for="IdEspecie" class="form-select" asp-items="ViewBag.IdEspecie"></select>
+                    <span asp-validation-for="IdEspecie" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Raza" class="form-label fw-bold"></label>
+                    <input asp-for="Raza" class="form-control" />
+                    <span asp-validation-for="Raza" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Sexo" class="form-label fw-bold"></label>
+                    <select asp-for="Sexo" class="form-select">
+                        <option value="Macho">Macho</option>
+                        <option value="Hembra">Hembra</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="FechaNacimiento" class="form-label fw-bold"></label>
+                    <input asp-for="FechaNacimiento" class="form-control" type="date" />
+                </div>
+            </div>
+
+            <!-- Dueño Actual con opción de reasignación AJAX -->
+            <div class="card p-3 mb-3 bg-light border-primary">
+                <label class="form-label fw-bold text-primary">Dueño Asignado:</label>
+                <input type="hidden" asp-for="IdDueño" id="idDueñoInput" />
+                <div class="alert alert-info py-2 mb-2">
+                    Actual: <strong>@(ViewBag.DueñoSeleccionado ?? Model.Dueño?.NombreCompleto)</strong>
+                </div>
+                <input type="text" id="buscarDuenoInput" class="form-control form-control-sm" placeholder="Buscar nuevo dueño para reasignar (DNI o Apellido)..." autocomplete="off" />
+                <ul id="listaResultadosDueños" class="list-group position-absolute w-100 shadow" style="display:none; z-index: 1050; max-height: 200px; overflow-y: auto;"></ul>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 text-center">
+                    @if (!string.IsNullOrEmpty(Model.Foto))
+                    {
+                        <img src="@Model.Foto" class="img-thumbnail rounded mb-2" width="100" height="100" style="object-fit:cover;" alt="Foto actual" />
+                    }
+                </div>
+                <div class="col-md-9">
+                    <label class="form-label fw-bold">Actualizar Foto (Opcional):</label>
+                    <input type="file" name="fotoFile" accept="image/*" class="form-control" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Observaciones" class="form-label fw-bold"></label>
+                <input asp-for="Observaciones" class="form-control" />
+            </div>
+
+            <div class="form-check mb-4">
+                <input class="form-check-input" asp-for="Activo" />
+                <label class="form-check-label" asp-for="Activo">Paciente Activo</label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">Actualizar Mascota</button>
+                <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const inputBuscar = document.getElementById('buscarDuenoInput');
+        const listaResultados = document.getElementById('listaResultadosDueños');
+        const inputHidden = document.getElementById('idDueñoInput');
+        let timeout = null;
+
+        inputBuscar.addEventListener('input', function () {
+            clearTimeout(timeout);
+            const query = this.value.trim();
+            if (query.length < 2) { listaResultados.style.display = 'none'; return; }
+
+            timeout = setTimeout(async () => {
+                const res = await fetch(`/Dueños/BuscarAjax?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                listaResultados.innerHTML = '';
+                data.forEach(d => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item list-group-item-action cursor-pointer';
+                    li.style.cursor = 'pointer';
+                    li.innerHTML = `<strong>${d.nombreCompleto}</strong> (DNI: ${d.dni})`;
+                    li.addEventListener('click', () => {
+                        inputHidden.value = d.idDueño;
+                        inputBuscar.value = d.nombreCompleto;
+                        listaResultados.style.display = 'none';
+                    });
+                    listaResultados.appendChild(li);
+                });
+                listaResultados.style.display = 'block';
+            }, 300);
+        });
+    </script>
+}

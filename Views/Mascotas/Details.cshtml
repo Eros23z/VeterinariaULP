@@ -1,0 +1,68 @@
+﻿@model VeterinariaULP.Models.Mascota
+
+@{
+    ViewData["Title"] = "Ficha Médica del Paciente";
+}
+
+<h2>Ficha de Paciente: @Model.Nombre</h2>
+<hr />
+
+<div class="card shadow-sm col-md-8">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Datos Biológicos y Contacto</h5>
+        <span class="badge @(Model.Activo ? "bg-success" : "bg-secondary")">
+            @(Model.Activo ? "Paciente Activo" : "Inactivo")
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                @if (!string.IsNullOrEmpty(Model.Foto))
+                {
+                    <img src="@Model.Foto" class="img-fluid rounded border shadow-sm mb-3" style="max-height: 200px; object-fit: cover;" alt="@Model.Nombre" />
+                }
+                else
+                {
+                    <div class="rounded bg-light text-muted p-4 border d-flex flex-column align-items-center justify-content-center mb-3">
+                        <i class="bi bi-camera display-4"></i>
+                        <span>Sin Foto</span>
+                    </div>
+                }
+            </div>
+            <div class="col-md-8">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Especie:</dt>
+                    <dd class="col-sm-8"><span class="badge bg-info text-dark">@Model.Especie?.Nombre</span></dd>
+
+                    <dt class="col-sm-4">Raza:</dt>
+                    <dd class="col-sm-8">@Model.Raza</dd>
+
+                    <dt class="col-sm-4">Sexo:</dt>
+                    <dd class="col-sm-8">@Model.Sexo</dd>
+
+                    <dt class="col-sm-4">F. Nacimiento:</dt>
+                    <dd class="col-sm-8">@Model.FechaNacimiento.ToString("dd/MM/yyyy")</dd>
+
+                    <dt class="col-sm-4">Dueño:</dt>
+                    <dd class="col-sm-8">
+                        <a asp-controller="Dueños" asp-action="Details" asp-route-id="@Model.IdDueño">
+                            @Model.Dueño?.NombreCompleto
+                        </a>
+                        <br />
+                        <small class="text-muted"><i class="bi bi-telephone"></i> @Model.Dueño?.Telefono</small>
+                    </dd>
+
+                    <dt class="col-sm-4">Observaciones:</dt>
+                    <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Observaciones) ? "Sin observaciones previas." : Model.Observaciones)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer bg-transparent d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.IdMascota" class="btn btn-warning">Editar</a>
+        <a asp-controller="Turnos" asp-action="Create" asp-route-idMascota="@Model.IdMascota" class="btn btn-success">
+            <i class="bi bi-calendar-plus"></i> Agendar Turno
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">Volver al listado</a>
+    </div>
+</div>

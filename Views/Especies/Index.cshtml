@@ -1,0 +1,78 @@
+﻿@model IEnumerable<VeterinariaULP.Models.Especie>
+
+@{
+    ViewData["Title"] = "Especies";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-tags"></i> Especies de Pacientes</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nueva Especie
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="get" asp-action="Index" class="row g-2 mb-3">
+    <div class="col-md-5">
+        <input type="text" name="search" class="form-control" placeholder="Buscar especie por nombre..." value="@ViewBag.Search" />
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-outline-secondary w-100">Buscar</button>
+    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.Search as string))
+    {
+        <div class="col-md-2">
+            <a asp-action="Index" class="btn btn-outline-danger w-100">Limpiar</a>
+        </div>
+    }
+</form>
+
+<div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover align-middle mb-0 bg-white">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.IdEspecie)</th>
+                <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="3" class="text-center py-4 text-muted">No se encontraron especies registradas.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><strong>#@item.IdEspecie</strong></td>
+                        <td>@item.Nombre</td>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-id="@item.IdEspecie" class="btn btn-sm btn-outline-warning">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.IdEspecie" class="btn btn-sm btn-outline-info">Detalles</a>
+                            <a asp-action="Delete" asp-route-id="@item.IdEspecie" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
