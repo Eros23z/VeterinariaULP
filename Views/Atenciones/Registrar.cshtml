@@ -1,0 +1,114 @@
+﻿@model VeterinariaULP.Models.AtencionClinica
+
+@{
+    ViewData["Title"] = "Completar Atención Clínica";
+}
+
+<h2>Registro de Consulta y Atención Médica</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Ficha resumen del Turno -->
+        <div class="card mb-4 border-info shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-info-circle"></i> Datos del Paciente y Cita #@Model.Turno?.IdTurno</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Paciente:</strong> @Model.Turno?.Mascota?.Nombre (@Model.Turno?.Mascota?.Raza) <br />
+                        <strong>Dueño:</strong> @Model.Turno?.Mascota?.Dueño?.NombreCompleto (Tel: @Model.Turno?.Mascota?.Dueño?.Telefono) <br />
+                        <strong>Motivo de Consulta:</strong> @Model.Turno?.Motivo
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Prestación:</strong> @Model.Turno?.Servicio?.Descripcion <br />
+                        <strong>Arancel Base:</strong> $@Model.Turno?.Servicio?.PrecioBase.ToString("N2") <br />
+                        <strong>Veterinario a cargo:</strong> @Model.Turno?.Veterinario?.NombreCompleto
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="Registrar" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="IdTurno" />
+
+            <div class="card p-3 mb-3 shadow-sm">
+                <h5 class="card-title text-primary"><i class="bi bi-journal-medical"></i> 1. Evaluación Médica</h5>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="FechaAtencion" class="form-label fw-bold"></label>
+                        <input asp-for="FechaAtencion" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="FechaAtencion" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PesoActual" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <input asp-for="PesoActual" class="form-control" type="number" step="0.01" placeholder="Ej: 4.5" />
+                            <span class="input-group-text">kg</span>
+                        </div>
+                        <span asp-validation-for="PesoActual" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Sintomas" class="form-label fw-bold"></label>
+                    <textarea asp-for="Sintomas" class="form-control" rows="2" placeholder="Hallazgos al examen físico, temperatura, estado general..."></textarea>
+                    <span asp-validation-for="Sintomas" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Diagnostico" class="form-label fw-bold"></label>
+                    <textarea asp-for="Diagnostico" class="form-control" rows="2" placeholder="Diagnóstico presuntivo o definitivo..."></textarea>
+                    <span asp-validation-for="Diagnostico" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TratamientoIndicado" class="form-label fw-bold"></label>
+                    <textarea asp-for="TratamientoIndicado" class="form-control" rows="2" placeholder="Medicación recetada, posología, pautas de alarma o fecha de control..."></textarea>
+                    <span asp-validation-for="TratamientoIndicado" class="text-danger"></span>
+                </div>
+
+                <!-- SUBIDA DE ARCHIVO ADICIONAL (REQUERIMIENTO OBLIGATORIO) -->
+                <div class="mb-2">
+                    <label class="form-label fw-bold"><i class="bi bi-file-earmark-medical"></i> Adjuntar Estudio / Radiografía (Opcional):</label>
+                    <input type="file" name="archivoEstudioFile" accept=".jpg,.jpeg,.png,.pdf" class="form-control" />
+                    <small class="text-muted">Formatos admitidos: imágenes (JPG, PNG) o informes en PDF.</small>
+                </div>
+            </div>
+
+            <!-- REGISTRO ATÓMICO DE PAGO -->
+            <div class="card p-3 mb-3 border-success shadow-sm">
+                <h5 class="card-title text-success"><i class="bi bi-cash-coin"></i> 2. Liquidación y Cobro de la Consulta</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Importe a Cobrar ($):</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" step="0.01" name="importeCobrado" class="form-control" value="@ViewBag.ImporteSugerido" required />
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Medio de Pago:</label>
+                        <select name="metodoPago" class="form-select">
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Transferencia">Transferencia Bancaria</option>
+                            <option value="Tarjeta">Tarjeta de Débito / Crédito</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">Guardar Atención y Generar Cobro</button>
+                <a asp-controller="Turnos" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

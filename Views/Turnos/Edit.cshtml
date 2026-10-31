@@ -1,0 +1,66 @@
+﻿@model VeterinariaULP.Models.Turno
+
+@{
+    ViewData["Title"] = "Editar Turno";
+}
+
+<h2>Modificar Turno #@Model.IdTurno</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-7">
+        <form asp-action="Edit" asp-route-id="@Model.IdTurno" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="IdTurno" />
+            <input type="hidden" asp-for="IdMascota" />
+
+            <div class="alert alert-secondary mb-3">
+                Paciente: <strong>@ViewBag.MascotaNombre</strong>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="FechaHora" class="form-label fw-bold"></label>
+                    <input asp-for="FechaHora" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="FechaHora" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="IdServicio" class="form-label fw-bold"></label>
+                    <select asp-for="IdServicio" class="form-select" asp-items="ViewBag.IdServicio"></select>
+                    <span asp-validation-for="IdServicio" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="IdVeterinario" class="form-label fw-bold"></label>
+                    <select asp-for="IdVeterinario" class="form-select" asp-items="ViewBag.IdVeterinario"></select>
+                    <span asp-validation-for="IdVeterinario" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Estado" class="form-label fw-bold"></label>
+                    <select asp-for="Estado" class="form-select">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Atendido">Atendido</option>
+                        <option value="Cancelado">Cancelado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Motivo" class="form-label fw-bold"></label>
+                <textarea asp-for="Motivo" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Motivo" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">Actualizar Turno</button>
+                <a asp-action="Index" class="btn btn-secondary">Volver a la Agenda</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

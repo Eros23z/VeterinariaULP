@@ -13,15 +13,11 @@ namespace VeterinariaULP.Controllers
             _context = context;
         }
 
-        // GET: Servicios (Renderiza la SPA con Vue 3)
+        // GET: Servicios
         public IActionResult Index()
         {
             return View();
         }
-
-        // ====================================================================
-        // ENDPOINTS AJAX / JSON (Consumidos por la SPA de Vue 3)
-        // ====================================================================
 
         // GET: Servicios/ListarJson
         [HttpGet]

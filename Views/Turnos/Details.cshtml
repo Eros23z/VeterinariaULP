@@ -1,0 +1,52 @@
+﻿@model VeterinariaULP.Models.Turno
+
+@{
+    ViewData["Title"] = "Detalle del Turno";
+}
+
+<h2>Detalle de Cita Médica #@Model.IdTurno</h2>
+<hr />
+
+<div class="card shadow-sm col-md-8">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Información del Turno</h5>
+        <span class="badge @(Model.Estado == "Pendiente" ? "bg-warning text-dark" : Model.Estado == "Atendido" ? "bg-success" : "bg-danger")">
+            @Model.Estado
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h6>Datos del Paciente</h6>
+                <strong>Nombre:</strong> @Model.Mascota?.Nombre <br />
+                <strong>Especie:</strong> @Model.Mascota?.Especie?.Nombre <br />
+                <strong>Raza:</strong> @Model.Mascota?.Raza <br />
+                <strong>Dueño:</strong> @Model.Mascota?.Dueño?.NombreCompleto <br />
+                <strong>Teléfono:</strong> @Model.Mascota?.Dueño?.Telefono
+            </div>
+            <div class="col-md-6">
+                <h6>Detalles de la Cita</h6>
+                <strong>Fecha y Hora:</strong> @Model.FechaHora.ToString("dd/MM/yyyy HH:mm") <br />
+                <strong>Servicio:</strong> @Model.Servicio?.Descripcion <br />
+                <strong>Duración Estimada:</strong> @Model.Servicio?.DuracionMinutos min <br />
+                <strong>Arancel Base:</strong> $@Model.Servicio?.PrecioBase.ToString("N2") <br />
+                <strong>Veterinario:</strong> @Model.Veterinario?.NombreCompleto
+            </div>
+        </div>
+
+        <div class="alert alert-light border">
+            <strong>Motivo registrado:</strong><br />
+            @Model.Motivo
+        </div>
+    </div>
+    <div class="card-footer bg-transparent d-flex gap-2">
+        @if (Model.Estado == "Pendiente")
+        {
+            <a asp-controller="Atenciones" asp-action="Registrar" asp-route-idTurno="@Model.IdTurno" class="btn btn-success">
+                <i class="bi bi-clipboard2-pulse"></i> Iniciar Atención Clínica
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.IdTurno" class="btn btn-warning">Editar</a>
+        }
+        <a asp-action="Index" class="btn btn-secondary">Volver al Listado</a>
+    </div>
+</div>

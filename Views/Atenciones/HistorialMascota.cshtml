@@ -1,0 +1,55 @@
+﻿@model IEnumerable<VeterinariaULP.Models.AtencionClinica>
+
+@{
+    var mascota = ViewBag.Mascota as VetPoint.Models.Mascota;
+    ViewData["Title"] = $"Historia Clínica de {mascota?.Nombre}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2><i class="bi bi-journal-album"></i> Historia Clínica: @mascota?.Nombre</h2>
+        <span class="text-muted">@mascota?.Especie?.Nombre | Raza: @mascota?.Raza | Dueño: @mascota?.Dueño?.NombreCompleto</span>
+    </div>
+    <a asp-controller="Mascotas" asp-action="Details" asp-route-id="@mascota?.IdMascota" class="btn btn-secondary">
+        Volver a la Ficha del Paciente
+    </a>
+</div>
+<hr />
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info py-4 text-center">
+        No se registran atenciones clínicas previas para este paciente.
+    </div>
+}
+else
+{
+    <div class="timeline">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3 shadow-sm border-start border-4 border-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0 text-primary">@item.Turno?.Servicio?.Descripcion</h5>
+                        <small class="text-muted fw-bold">@item.FechaAtencion.ToString("dd/MM/yyyy HH:mm")</small>
+                    </div>
+
+                    <p class="mb-1"><strong>Diagnóstico:</strong> @item.Diagnostico</p>
+                    <p class="mb-1"><strong>Tratamiento:</strong> @item.TratamientoIndicado</p>
+                    <p class="mb-2"><strong>Peso:</strong> @item.PesoActual kg | <strong>Veterinario:</strong> @item.Turno?.Veterinario?.NombreCompleto</p>
+
+                    @if (!string.IsNullOrEmpty(item.ArchivoEstudio))
+                    {
+                        <a href="@item.ArchivoEstudio" target="_blank" class="badge bg-info text-dark text-decoration-none me-2">
+                            <i class="bi bi-paperclip"></i> Estudio Adjunto
+                        </a>
+                    }
+
+                    <a asp-action="Details" asp-route-id="@item.IdAtencion" class="btn btn-sm btn-outline-primary py-0">
+                        Ver Ficha Completa
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}

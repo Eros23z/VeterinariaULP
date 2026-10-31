@@ -1,0 +1,130 @@
+﻿@model IEnumerable<VeterinariaULP.Models.Turno>
+
+@{
+    ViewData["Title"] = "Agenda de Turnos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-calendar-event"></i> Agenda de Turnos Médicos</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Nuevo Turno
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="get" asp-action="Index" class="row g-2 mb-3 bg-light p-3 rounded shadow-sm">
+    <div class="col-md-3">
+        <input type="text" name="search" class="form-control" placeholder="Paciente, Dueño (DNI) o Motivo..." value="@ViewBag.Search" />
+    </div>
+    <div class="col-md-2">
+        <select name="estado" class="form-select">
+            <option value="">-- Todos los Estados --</option>
+            <option value="Pendiente" selected="@(ViewBag.Estado == "Pendiente")">Pendiente</option>
+            <option value="Atendido" selected="@(ViewBag.Estado == "Atendido")">Atendido</option>
+            <option value="Cancelado" selected="@(ViewBag.Estado == "Cancelado")">Cancelado</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="idVeterinario" class="form-select" asp-items="ViewBag.Veterinarios">
+            <option value="">-- Todos los Veterinarios --</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="fecha" class="form-control" value="@ViewBag.Fecha" />
+    </div>
+    <div class="col-md-2 d-flex gap-1">
+        <button type="submit" class="btn btn-outline-secondary w-100">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-danger">Limpiar</a>
+    </div>
+</form>
+
+<div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover align-middle mb-0 bg-white">
+        <thead class="table-dark">
+            <tr>
+                <th>N°</th>
+                <th>Fecha y Hora</th>
+                <th>Paciente</th>
+                <th>Dueño</th>
+                <th>Prestación</th>
+                <th>Profesional</th>
+                <th>Estado</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center py-4 text-muted">No se registran turnos con los criterios indicados.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr class="@(item.Estado == "Cancelado" ? "table-light text-muted text-decoration-line-through" : "")">
+                        <td><strong>#@item.IdTurno</strong></td>
+                        <td>
+                            <strong>@item.FechaHora.ToString("dd/MM/yyyy HH:mm")</strong>
+                            <small class="d-block text-muted">(@item.Servicio?.DuracionMinutos min)</small>
+                        </td>
+                        <td>
+                            <a asp-controller="Mascotas" asp-action="Details" asp-route-id="@item.IdMascota" class="fw-bold text-decoration-none">
+                                @item.Mascota?.Nombre
+                            </a>
+                        </td>
+                        <td>
+                            @item.Mascota?.Dueño?.NombreCompleto
+                            <small class="d-block text-muted"><i class="bi bi-telephone"></i> @item.Mascota?.Dueño?.Telefono</small>
+                        </td>
+                        <td>@item.Servicio?.Descripcion</td>
+                        <td>@item.Veterinario?.NombreCompleto</td>
+                        <td>
+                            @if (item.Estado == "Pendiente")
+                            {
+                                <span class="badge bg-warning text-dark">Pendiente</span>
+                            }
+                            else if (item.Estado == "Atendido")
+                            {
+                                <span class="badge bg-success">Atendido</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Cancelado</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@item.IdTurno" class="btn btn-sm btn-outline-info">Ver</a>
+                            @if (item.Estado == "Pendiente")
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.IdTurno" class="btn btn-sm btn-outline-warning">Editar</a>
+                                <form asp-action="Cancelar" asp-route-id="@item.IdTurno" method="post" class="d-inline" onsubmit="return confirm('¿Desea cancelar este turno?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Cancelar</button>
+                                </form>
+                            }
+                            <a asp-action="Delete" asp-route-id="@item.IdTurno" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_Pagination" />

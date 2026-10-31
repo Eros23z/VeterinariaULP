@@ -1,0 +1,36 @@
+﻿@model VeterinariaULP.Models.Turno
+
+@{
+    ViewData["Title"] = "Eliminar Turno";
+}
+
+<h2 class="text-danger">Eliminar Registro de Turno</h2>
+<h5>¿Está seguro de que desea eliminar permanentemente esta cita médica?</h5>
+<hr />
+
+<div class="card border-danger shadow-sm col-md-6 mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">N° Turno</dt>
+            <dd class="col-sm-8">#@Model.IdTurno</dd>
+
+            <dt class="col-sm-4">Fecha y Hora</dt>
+            <dd class="col-sm-8">@Model.FechaHora.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-4">Paciente</dt>
+            <dd class="col-sm-8">@Model.Mascota?.Nombre (@Model.Mascota?.Dueño?.NombreCompleto)</dd>
+
+            <dt class="col-sm-4">Prestación</dt>
+            <dd class="col-sm-8">@Model.Servicio?.Descripcion</dd>
+
+            <dt class="col-sm-4">Veterinario</dt>
+            <dd class="col-sm-8">@Model.Veterinario?.NombreCompleto</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete" asp-route-id="@Model.IdTurno" method="post">
+    <input type="hidden" name="id" value="@Model.IdTurno" />
+    <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -1,0 +1,100 @@
+﻿@model VeterinariaULP.Models.AtencionClinica
+
+@{
+    ViewData["Title"] = "Ficha de Consulta Médica";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Ficha Clínica #@Model.IdAtencion</h2>
+    <div>
+        <a asp-action="HistorialMascota" asp-route-id="@Model.Turno?.IdMascota" class="btn btn-outline-secondary">
+            <i class="bi bi-clock-history"></i> Ver Historial Completo
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">Volver al Listado</a>
+    </div>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm mb-3">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Consulta del @Model.FechaAtencion.ToString("dd/MM/yyyy HH:mm")</h5>
+                <span class="badge bg-success">Turno Atendido</span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>Paciente y Propietario</h6>
+                        <strong>Mascota:</strong> @Model.Turno?.Mascota?.Nombre (@Model.Turno?.Mascota?.Especie?.Nombre - @Model.Turno?.Mascota?.Raza) <br />
+                        <strong>Peso en Consulta:</strong> <span class="badge bg-secondary">@Model.PesoActual kg</span> <br />
+                        <strong>Dueño:</strong> @Model.Turno?.Mascota?.Dueño?.NombreCompleto <br />
+                        <strong>Contacto:</strong> @Model.Turno?.Mascota?.Dueño?.Telefono
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Profesional y Prestación</h6>
+                        <strong>Veterinario:</strong> @Model.Turno?.Veterinario?.NombreCompleto <br />
+                        <strong>Prestación:</strong> @Model.Turno?.Servicio?.Descripcion <br />
+                        <strong>Turno Origen:</strong> Cita #@Model.IdTurno
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="mb-3">
+                    <h6 class="text-primary">Síntomas y Cuadro Clínico</h6>
+                    <p class="bg-light p-2 rounded">@Model.Sintomas</p>
+                </div>
+
+                <div class="mb-3">
+                    <h6 class="text-primary">Diagnóstico Definitivo</h6>
+                    <p class="bg-light p-2 rounded fw-bold">@Model.Diagnostico</p>
+                </div>
+
+                <div class="mb-3">
+                    <h6 class="text-primary">Tratamiento y Prescripción</h6>
+                    <p class="bg-light p-2 rounded">@Model.TratamientoIndicado</p>
+                </div>
+
+                <!-- Archivo de estudio adjunto -->
+                @if (!string.IsNullOrEmpty(Model.ArchivoEstudio))
+                {
+                    <div class="card p-3 bg-light border-primary mb-3">
+                        <h6 class="text-primary"><i class="bi bi-paperclip"></i> Estudio Complementario / Radiografía</h6>
+                        <div class="d-flex align-items-center gap-3">
+                            @if (Model.ArchivoEstudio.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <i class="bi bi-file-earmark-pdf text-danger display-6"></i>
+                                <div>
+                                    <span>Informe de estudio en formato PDF</span><br />
+                                    <a href="@Model.ArchivoEstudio" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Descargar / Ver PDF</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <img src="@Model.ArchivoEstudio" class="img-thumbnail rounded" style="max-height: 120px;" alt="Estudio adjunto" />
+                                <div>
+                                    <a href="@Model.ArchivoEstudio" target="_blank" class="btn btn-sm btn-outline-primary">Ver Imagen en Tamaño Completo</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- Comprobante de pago integrado -->
+                @if (Model.Pago != null)
+                {
+                    <div class="alert alert-success d-flex justify-content-between align-items-center mb-0">
+                        <div>
+                            <i class="bi bi-check-circle-fill"></i> <strong>Cobro Registrado (#@Model.Pago.IdPago):</strong>
+                            $@Model.Pago.Importe.ToString("N2") con @Model.Pago.MetodoPago (@Model.Pago.FechaPago.ToString("dd/MM/yyyy HH:mm"))
+                        </div>
+                        <a asp-controller="Pagos" asp-action="Details" asp-route-id="@Model.Pago.IdPago" class="btn btn-sm btn-outline-success">
+                            Ver Recibo
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

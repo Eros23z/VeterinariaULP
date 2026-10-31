@@ -12,9 +12,9 @@ namespace VeterinariaULP.Models
         public DbSet<Dueño> Dueños { get; set; }
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<Mascota> Mascotas { get; set; }
-        // public DbSet<Turno> Turnos { get; set; }
-        // public DbSet<AtencionClinica> AtencionesClinicas { get; set; }
-        // public DbSet<Pago> Pagos { get; set; }
-        // public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Turno> Turnos { get; set; }
+        public DbSet<AtencionClinica> AtencionesClinicas { get; set; }
+        public DbSet<Pago> Pagos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }

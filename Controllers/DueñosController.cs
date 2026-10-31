@@ -149,7 +149,7 @@ namespace VeterinariaULP.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // REQUERIMIENTO 6: Endpoint para Búsqueda Asíncrona (AJAX) en formularios
+        // Endpoint para Busqueda Asíncrona (AJAX) en formularios
         [HttpGet]
         public IActionResult BuscarAjax(string? q)
         {
