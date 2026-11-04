@@ -1,0 +1,122 @@
+{
+  "info": {
+    "_postman_id": "22b5190c-00e1-4207-9515-1a25abde216f",
+    "name": "Vetpoint",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29192947"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var data = pm.response.json();\r\nif (data.token) {\r\n    pm.collectionVariables.set(\"jwt_token\", data.token);\r\n}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"admin@vetpoint.com\",\r\n  \"clave\": \"admin123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7110/api/Auth/Login",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7110",
+          "path": [
+            "api",
+            "Auth",
+            "Login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Mascotas",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7110/api/MascotasApi",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7110",
+          "path": [
+            "api",
+            "MascotasApi"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Mascota por ID",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7110/api/MascotasApi/1",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7110",
+          "path": [
+            "api",
+            "MascotasApi",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": ""
+    },
+    {
+      "key": "json_web_token_0z4e",
+      "secret": true
+    }
+  ]
+}

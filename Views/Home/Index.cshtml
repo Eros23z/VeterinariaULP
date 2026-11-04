@@ -1,8 +1,83 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm border text-center">
+    <div class="container-fluid py-3">
+        <div class="display-5 fw-bold text-primary mb-2">
+            <i class="bi bi-hospital"></i> VetPoint
+        </div>
+        <p class="fs-4 text-muted mb-4">
+            Centro de Atención Médica Veterinaria e Historial Clínico
+        </p>
+
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <div class="alert alert-primary d-inline-block px-4 py-2 mb-3">
+                <i class="bi bi-person-check-fill"></i> Sesión activa como <strong>@User.FindFirst("FullName")?.Value</strong> (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)
+            </div>
+            <div class="d-flex justify-content-center gap-2 mt-2">
+                <a asp-controller="Turnos" asp-action="Index" class="btn btn-primary btn-lg">
+                    <i class="bi bi-calendar-check"></i> Ver Agenda de Turnos
+                </a>
+                <a asp-controller="Mascotas" asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                    <i class="bi bi-heart-pulse"></i> Pacientes
+                </a>
+            </div>
+        }
+        else
+        {
+            <p class="col-md-8 mx-auto text-secondary mb-4">
+                Plataforma integral para la gestión de citas médicas, fichas evolutivas, prestaciones clínicas y control de pacientes.
+            </p>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg px-4">
+                <i class="bi bi-box-arrow-in-right"></i> Ingresar al Panel de Gestión
+            </a>
+        }
+    </div>
+</div>
+
+<!-- TARJETAS -->
+<div class="row g-4 mt-2">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 border-top border-4 border-primary text-center p-3">
+            <div class="card-body">
+                <div class="fs-1 text-primary mb-2">
+                    <i class="bi bi-clipboard2-pulse"></i>
+                </div>
+                <h5 class="card-title fw-bold">Consultas e Historias Clínicas</h5>
+                <p class="card-text text-muted">
+                    Seguimiento evolutivo de diagnósticos, peso, síntomas y prescripciones de tratamientos por paciente.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 border-top border-4 border-success text-center p-3">
+            <div class="card-body">
+                <div class="fs-1 text-success mb-2">
+                    <i class="bi bi-calendar2-week"></i>
+                </div>
+                <h5 class="card-title fw-bold">Agenda de Turnos</h5>
+                <p class="card-text text-muted">
+                    Organización de citas por profesional y servicio, garantizando la no superposición de horarios.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 border-top border-4 border-info text-center p-3">
+            <div class="card-body">
+                <div class="fs-1 text-info mb-2">
+                    <i class="bi bi-file-earmark-medical"></i>
+                </div>
+                <h5 class="card-title fw-bold">Estudios Complementarios</h5>
+                <p class="card-text text-muted">
+                    Digitalización y resguardo de radiografías, ecografías y análisis de laboratorio vinculados a cada consulta.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>

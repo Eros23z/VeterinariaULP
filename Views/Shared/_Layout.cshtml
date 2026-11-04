@@ -1,65 +1,107 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using System.Security.Claims
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VeterinariaULP</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - VetPoint</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/VeterinariaULP.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">VeterinariaULP</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand fw-bold text-primary" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-hospital"></i> VetPoint
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-dismiss="collapse" data-bs-target="#navbarVet">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Especies" asp-action="Index">Especies</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Dueños" asp-action="Index">Dueños</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Servicios" asp-action="Index">Servicios (Vue)</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Mascotas" asp-action="Index">Mascotas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Turnos" asp-action="Index">Turnos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Atenciones" asp-action="Index">Atenciones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Pagos" asp-action="Index">Pagos</a>
-                        </li>
+                <div class="collapse navbar-collapse" id="navbarVet">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Turnos" asp-action="Index">Turnos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Atenciones" asp-action="Index">Atenciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Mascotas" asp-action="Index">Pacientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Dueños" asp-action="Index">Dueños</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Servicios" asp-action="Index">Servicios (Vue 3)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Especies" asp-action="Index">Especies</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Pagos" asp-action="Index">Pagos</a>
+                            </li>
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-warning" asp-controller="Usuarios" asp-action="Index">Personal</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            var avatar = User.FindFirst("Avatar")?.Value;
+                            <li class="nav-item me-2">
+                                <a class="nav-link d-flex align-items-center text-white" asp-controller="Account" asp-action="Perfil">
+                                    @if (!string.IsNullOrEmpty(avatar))
+                                    {
+                                        <img src="@avatar" class="rounded-circle me-2 border border-light" width="30" height="30" style="object-fit: cover;" alt="Avatar" />
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-person-circle fs-5 me-1"></i>
+                                    }
+                                    <span>@User.FindFirst("FullName")?.Value</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-danger btn-sm" asp-controller="Account" asp-action="Logout">
+                                    <i class="bi bi-box-arrow-right"></i> Salir
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-primary btn-sm" asp-controller="Account" asp-action="Login">
+                                    <i class="bi bi-box-arrow-in-right"></i> Ingresar
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container my-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - VeterinariaULP - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer text-muted py-3 bg-light">
+        <div class="container text-center">
+            &copy; 2026 - VetPoint - Clínica Veterinaria | Desarrollo Web con ASP.NET Core MVC & EF Core
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

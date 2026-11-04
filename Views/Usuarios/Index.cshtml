@@ -1,0 +1,79 @@
+﻿@model IEnumerable<VeterinariaULP.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><i class="bi bi-people-fill"></i> Personal del Centro Veterinario</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-person-plus"></i> Nuevo Personal
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover align-middle mb-0 bg-white">
+        <thead class="table-dark">
+            <tr>
+                <th>N°</th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Matrícula</th>
+                <th>Estado</th>
+                <th class="text-end">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>#@item.IdUsuario</strong></td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(item.Avatar))
+                            {
+                                <img src="@item.Avatar" class="rounded-circle me-2 border shadow-sm" width="36" height="36" style="object-fit: cover;" alt="Avatar" />
+                            }
+                            else
+                            {
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 36px; height: 36px;">
+                                    @(item.Nombre.Length > 0 ? item.Nombre[0].ToString().ToUpper() : "U")
+                                </div>
+                            }
+                            <strong>@item.Nombre @item.Apellido</strong>
+                        </div>
+                    </td>
+                    <td>@item.Email</td>
+                    <td>
+                        <span class="badge @(item.Rol == "Administrador" ? "bg-primary" : "bg-info text-dark")">
+                            @item.Rol
+                        </span>
+                    </td>
+                    <td>@(item.Matricula ?? "-")</td>
+                    <td>
+                        <span class="badge @(item.Estado ? "bg-success" : "bg-danger")">
+                            @(item.Estado ? "Activo" : "Inactivo")
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a asp-action="Edit" asp-route-id="@item.IdUsuario" class="btn btn-sm btn-outline-warning">Editar</a>
+                        <form asp-action="ToggleEstado" asp-route-id="@item.IdUsuario" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-@(item.Estado ? "danger" : "success")">
+                                @(item.Estado ? "Inhabilitar" : "Activar")
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

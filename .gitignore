@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+.DS_Store
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -361,3 +362,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+## Archivos subidos en desarrollo 
+VeterinariaULP/wwwroot/uploads/*
+!VeterinariaULP/wwwroot/uploads/.gitkeep

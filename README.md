@@ -147,6 +147,26 @@ erDiagram
 * **Pagos:** Registro de la transacción económica resultante de la atención médica realizada, detallando fecha, medio de pago (Efectivo, Tarjeta, Transferencia) y usuario que cobró.
 
 ## 4. Descripción de Relaciones
+
 * **Mascotas -> Turnos -> AtencionesClinicas (1 a 1 opcional):** Un turno reserva un espacio temporal en la agenda. No todos los turnos terminan siendo atenciones médicas (pueden ser cancelados o haber inasistencia del paciente). Por lo tanto, la relación entre Turnos y AtencionesClinicas es de 1 a 0..1. La atención médica solo se crea cuando el veterinario examina físicamente al animal, desacoplando la cita administrativa del acto clínico profesional.
 * **AtencionesClinicas -> Pagos (1 a 0..1):** El cobro surge como consecuencia de la atención médica brindada (o arancel acordado por procedimientos). Esta vinculación garantiza que ningún pago quede huérfano y que se pueda conocer con exactitud a qué consulta específica correspondió cada importe cobrado.
 * **Usuarios (Veterinario) -> Turnos (1 a N):** Permite filtrar las agendas de manera individual para que cada médico veterinario pueda consultar sus compromisos del día sin interferir en la agenda de los demás colegas del establecimiento.
+
+
+## 5. Credenciales de Acceso Semilla
+
+| **Administrador** | `admin@vetpoint.com` | `admin123` | Control total, ABM de personal (`/Usuarios`), reportes y anulación contable.
+| **Veterinario** | `valeria@vetpoint.com` | `vet123` | Agenda de turnos, atención de pacientes, historia clínica e ingreso de cobros.
+
+## 6. Instrucciones para Levantar la Base de Datos y la Aplicación
+    A. **Abra SQL Server Management Studio (SSMS) y conéctese a su servidor local ((localdb)\mssqllocaldb o localhost).**
+    B. **Abra el archivo Database.sql ubicado en la raíz del repositorio y ejecútelo con F5.**
+    C. **Verifique que la cadena de conexión en appsettings.json coincida con su instancia local:**
+        "ConnectionStrings": {
+            "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=VetPointDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+        }
+
+## 7. Pruebas de la Web API con JWT:
+
+**En la raíz del proyecto se incluye el archivo VetPoint_API.postman_collection.json. Puede importarlo directamente en Postman para probar el flujo de Login y la 
+consulta de endpoints protegidos con Bearer Token (por defecto apunta a https://localhost:7110).**

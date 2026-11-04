@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Acceso al Sistema";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-primary">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0"><i class="bi bi-shield-lock"></i> VetPoint</h4>
+                <small>Gestión Veterinaria y Citas</small>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Correo Electrónico:</label>
+                        <input type="email" name="email" class="form-control" placeholder="admin@vetpoint.com" required autofocus />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Contraseña:</label>
+                        <input type="password" name="clave" class="form-control" placeholder="••••••••" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-2">Iniciar Sesión</button>
+                </form>
+
+                <div class="alert alert-light border mt-3 mb-0 py-2">
+                    <small class="text-muted d-block"><strong>Usuarios de Prueba:</strong></small>
+                    <small>• Admin: <code>admin@vetpoint.com</code> (admin123)</small><br />
+                    <small>• Veterinario: <code>valeria@vetpoint.com</code> (vet123)</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
