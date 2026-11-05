@@ -166,7 +166,19 @@ erDiagram
             "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=VetPointDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
         }
 
-## 7. Pruebas de la Web API con JWT:
+## 7. Matriz de Evidencias de Requerimientos Mínimos
+
+| Requerimiento Mínimo | Estado | Archivo / Controlador de Referencia | Evidencia / Mecanismo Técnico |
+| :--- | :---: | :--- | :--- |
+| **1. Modelo con 8 Tablas y Relación Dependiente** | ? Cumplido | [`Models/DataContext.cs`](VeterinariaULP/Models/DataContext.cs) / [`database.sql`](database.sql) | Esquema relacional completo. `Turnos` depende de `Mascotas`, `Servicios` y `Usuarios`. |
+| **2. Login, Manejo de Roles y Avatar Personalizado** | ? Cumplido | [`Controllers/AccountController.cs`](VeterinariaULP/Controllers/AccountController.cs) | Cookie Auth, claims dinámicas y guardado físico en `wwwroot/uploads/avatars/`. |
+| **3. Manejo de Archivos Extra en Servidor** | ? Cumplido | [`Controllers/AtencionesController.cs`](VeterinariaULP/Controllers/AtencionesController.cs) | Subida física de estudios/radiografías (`IFormFile`) en `wwwroot/uploads/estudios/`. |
+| **4. ABM Reactivo en Vue 3 + AJAX (SPA)** | ? Cumplido | [`Views/Servicios/Index.cshtml`](VeterinariaULP/Views/Servicios/Index.cshtml) | CRUD completo de Servicios en Options API y Fetch API sin recarga de página. |
+| **5. Paginado por Servidor (Server-Side)** | ? Cumplido | [`Controllers/DueñosController.cs`](VeterinariaULP/Controllers/DueñosController.cs) | Paginación nativa en backend mediante `.Skip()` y `.Take()` de EF Core. |
+| **6. Selección Asíncrona (AJAX en Formulario)** | ? Cumplido | [`Views/Mascotas/Create.cshtml`](VeterinariaULP/Views/Mascotas/Create.cshtml) | Búsqueda reactiva de dueños por DNI/Apellido sin `<select>` masivo. |
+| **7. Web API RESTful con JWT + Postman** | ? Cumplido | [`Controllers/Api/MascotasApiController.cs`](VeterinariaULP/Controllers/Api/MascotasApiController.cs) | Endpoints con Bearer Token + colección [`VetPoint_API.postman_collection.json`](VetPoint_API.postman_collection.json). |
+
+## 8. Pruebas de la Web API con JWT:
 
 **En la raíz del proyecto se incluye el archivo VetPoint_API.postman_collection.json. Puede importarlo directamente en Postman para probar el flujo de Login y la 
 consulta de endpoints protegidos con Bearer Token (por defecto apunta a https://localhost:7110).**

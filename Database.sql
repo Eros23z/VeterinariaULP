@@ -7,9 +7,7 @@ GO
 USE VetPointDB;
 GO
 
--- ============================================================================
--- 0. ELIMINACIÓN EN CASCADA (Hijas primero -> Padres al final)
--- ============================================================================
+-- 0. ELIMINACIÓN EN CASCADA 
 DROP TABLE IF EXISTS Pagos;
 DROP TABLE IF EXISTS AtencionesClinicas;
 DROP TABLE IF EXISTS Turnos;
@@ -20,10 +18,7 @@ DROP TABLE IF EXISTS Dueños;
 DROP TABLE IF EXISTS Usuarios;
 GO
 
--- ============================================================================
 -- 1. CREACIÓN DE TABLAS
--- ============================================================================
-
 CREATE TABLE Usuarios (
     IdUsuario INT IDENTITY(1,1) PRIMARY KEY,
     Nombre VARCHAR(50) NOT NULL,
@@ -121,10 +116,7 @@ CREATE TABLE Pagos (
 );
 GO
 
--- ============================================================================
 -- 2. DATOS SEMILLA (SEEDS)
--- ============================================================================
-
 INSERT INTO Usuarios (Nombre, Apellido, Email, Clave, Rol, Matricula, Estado) VALUES
 ('Administrador', 'General', 'admin@vetpoint.com', 'admin123', 'Administrador', NULL, 1),
 ('Valeria', 'Montes', 'valeria@vetpoint.com', 'vet123', 'Veterinario', 'MP-4582', 1),
@@ -134,7 +126,19 @@ GO
 INSERT INTO Dueños (Dni, Nombre, Apellido, Telefono, Email, Direccion, Estado) VALUES
 ('34111222', 'Sofía', 'Alvarez', '2664112233', 'sofia.alvarez@gmail.com', 'Av. del Sol 450', 1),
 ('31444555', 'Ramiro', 'Giménez', '2664445566', 'ramiro.g@hotmail.com', 'Los Almendros 120', 1),
-('38999888', 'Camila', 'Torres', '2664778899', 'camitorres@gmail.com', 'Pedernera 890', 1);
+('38999888', 'Camila', 'Torres', '2664778899', 'camitorres@gmail.com', 'Pedernera 890', 1),
+('35222333', 'Lucas', 'Pérez', '2664223344', 'lucas.perez@gmail.com', 'San Martín 1024, San Luis', 1),
+('36555666', 'Florencia', 'Mendoza', '2664556677', 'flor.mendoza@outlook.com', 'Junín 550, San Luis', 1),
+('33888999', 'Agustín', 'Castro', '2664889900', 'agustin.castro@gmail.com', 'Belgrano 120, Villa Mercedes', 1),
+('37123456', 'Mariana', 'Silva', '2664332211', 'mariana.silva@yahoo.com', 'Av. Illia 340, San Luis', 1),
+('32987654', 'Gonzalo', 'Romero', '2664667788', 'gonzalo.r@gmail.com', 'Rivadavia 812, San Luis', 1),
+('39456789', 'Luciana', 'Díaz', '2664991122', 'lu.diaz@gmail.com', 'Las Heras 430, Merlo', 1),
+('34789123', 'Esteban', 'Morales', '2664123987', 'esteban.morales@hotmail.com', 'Chacabuco 760, San Luis', 1),
+('30654321', 'Paula', 'Navarro', '2664789456', 'paula.navarro@gmail.com', 'Mitre 215, San Luis', 1),
+('38321654', 'Federico', 'Sosa', '2664654123', 'fede.sosa@gmail.com', 'Av. del Sol 1100, Merlo', 1),
+('31987321', 'Natalia', 'Vega', '2664321789', 'naty.vega@gmail.com', 'España 945, San Luis', 1),
+('36111444', 'Joaquín', 'Quiroga', '2664441122', 'joaquin.q@hotmail.com', 'Lavalle 330, San Luis', 1),
+('35777888', 'Daniela', 'Herrera', '2664887711', 'daniela.h@gmail.com', 'Colón 670, San Luis', 1);
 GO
 
 INSERT INTO Especies (Nombre) VALUES
